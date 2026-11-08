@@ -16,7 +16,7 @@ import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 public final class CartPage extends BasePage {
 
     @AndroidFindBy(id = AndroidIds.PREFIX + "itemsTV")
-    @iOSXCUITFindBy(iOSNsPredicate = "label ENDSWITH ' Items'")
+    @iOSXCUITFindBy(iOSNsPredicate = "label MATCHES '[0-9]+ Items'") // ENDSWITH also matched the hidden "No Items"
     private WebElement itemCount;
 
     @OnlyOn(value = Platform.IOS, reason = "iOS waits for the screen id, Android waits for the item count")
