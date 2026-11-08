@@ -121,9 +121,9 @@ Removing the add-to-cart tap from `ProductPage` turned all 3 `CartTest` tests re
 | Platform | Where | Result |
 |---|---|---|
 | Android 15 emulator | locally (2 runs in a row) and GitHub Actions | all regular tests green, known-bug tests reproduce MDA-03 |
-| iOS simulator (iPhone 16) | GitHub Actions, macOS runner | catalog and cart tests passed, the product name check passed; the iOS job is **not green yet**: in the last run one session could not start (WebDriverAgent did not come up), so the product tests were skipped |
+| iOS simulator (iPhone 16) | GitHub Actions, macOS runner | all regular tests green after the WebDriverAgent startup retries; MDA-04 reproduces, MDA-03 is skipped as an Android defect |
 
-The iOS job is kept in CI on purpose: its failures print the page source, which is how every iOS locator here was corrected.
+Without a Mac, every iOS locator here was corrected from the page source that failed iOS runs print into the CI log.
 
 ## Run it
 
