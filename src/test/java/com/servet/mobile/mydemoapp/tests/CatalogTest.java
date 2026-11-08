@@ -24,7 +24,8 @@ public class CatalogTest extends BaseMobileTest {
     public void the_first_product_is_sauce_labs_backpack() {
         CatalogPage catalog = new CatalogPage(driver());
 
-        assertThat(catalog.productNames().get(0)).isEqualTo("Sauce Labs Backpack");
+        // iOS appends " - Black" to the name; the prefix holds on both platforms
+        assertThat(catalog.productNames().get(0)).startsWith("Sauce Labs Backpack");
     }
 
     @DataProvider(name = "cardsOtherThanTheFirst")
