@@ -50,12 +50,18 @@ public final class CatalogPage extends BasePage {
         if (isAndroid()) {
             return textOf(price);
         }
-        // on iOS the accessibility id is the name, so the price is read from value or label
-        String value = visible(price).getAttribute("value");
-        if (value != null && value.startsWith("$")) {
-            return value;
+        // the storyboard labels every price "Product Price", so the amount may sit in another attribute
+        WebElement element = visible(price);
+        String text = element.getText();
+        String value = element.getAttribute("value");
+        String label = element.getAttribute("label");
+        for (String candidate : List.of(text, value, label)) {
+            if (candidate != null && candidate.startsWith("$")) {
+                return candidate;
+            }
         }
-        return visible(price).getAttribute("label");
+        throw new IllegalStateException("iOS does not expose the catalog price: text=" + text
+                + ", value=" + value + ", label=" + label + ", name=" + element.getAttribute("name"));
     }
 
     public ProductPage openProduct(int index) {
