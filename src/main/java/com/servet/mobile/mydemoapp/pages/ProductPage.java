@@ -146,9 +146,9 @@ public final class ProductPage extends BasePage {
             return badges.isEmpty() ? 0 : parseCount(badges.get(0).getText());
         }
         // the badge is not inside the cart tab button and has no id, so it is found next to its
-        // icon; its name is the count
+        // icon; its name is the count. The icon is Gray or Green depending on the selected tab.
         List<WebElement> badges = driver.findElements(AppiumBy.xpath(
-                "//XCUIElementTypeImage[@name='GrayRoundView Icons']/following-sibling::XCUIElementTypeStaticText"));
+                "//XCUIElementTypeImage[contains(@name,'RoundView Icons')]/following-sibling::XCUIElementTypeStaticText"));
         for (WebElement badge : badges) {
             String name = badge.getAttribute("name");
             if (name != null && INTEGER.matcher(name).matches()) {

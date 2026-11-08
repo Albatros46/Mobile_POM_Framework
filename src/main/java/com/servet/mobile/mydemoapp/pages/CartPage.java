@@ -24,11 +24,15 @@ public final class CartPage extends BasePage {
     private WebElement iosCartScreen;
 
     @AndroidFindBy(id = AndroidIds.PREFIX + "titleTV")
-    @iOSXCUITFindBy(accessibility = "Product Name")
+    // iOS names have no id: the name is the visible text right before a "$ " price
+    @iOSXCUITFindBy(xpath = "//XCUIElementTypeOther[@name='Cart-screen']"
+            + "//XCUIElementTypeStaticText[@visible='true']"
+            + "[following::XCUIElementTypeStaticText[1][starts-with(@name,'$ ')]]")
     private List<WebElement> names;
 
     @AndroidFindBy(id = AndroidIds.PREFIX + "removeBt")
-    @iOSXCUITFindBy(accessibility = "Remove Item")
+    // a static text also reads "Remove Item", so only buttons are matched
+    @iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeButton[`name == \"Remove Item\"`]")
     private List<WebElement> removeButtons;
 
     @AndroidFindBy(uiAutomator = "new UiSelector().text(\"No Items\")")
