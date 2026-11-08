@@ -72,7 +72,7 @@ public final class ProductPage extends BasePage {
         if (isAndroid()) {
             return textOf(androidName);
         }
-        // first static text that is neither the screen title nor a price; the real name is not confirmed yet
+        // first static text that is neither the screen title nor a price
         return visible(iosDetailsScreen)
                 .findElements(AppiumBy.className("XCUIElementTypeStaticText"))
                 .stream()
