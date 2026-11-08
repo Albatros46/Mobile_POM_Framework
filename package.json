@@ -1,0 +1,15 @@
+{
+  "name": "mobile-pom-framework-server",
+  "private": true,
+  "description": "The Appium server with its Android and iOS drivers, pinned for this project",
+  "scripts": {
+    "appium": "appium --port 4723",
+    "doctor:android": "appium driver doctor uiautomator2",
+    "doctor:ios": "appium driver doctor xcuitest"
+  },
+  "devDependencies": {
+    "appium": "3.9.0",
+    "appium-uiautomator2-driver": "8.7.3",
+    "appium-xcuitest-driver": "12.22.8"
+  }
+}

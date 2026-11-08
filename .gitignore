@@ -1,0 +1,9 @@
+target/
+node_modules/
+apps/
+.idea/
+*.iml
+appium.log
+.classpath
+.project
+.settings/
