@@ -46,7 +46,16 @@ public final class CatalogPage extends BasePage {
     }
 
     public String priceOf(int index) {
-        return textOf(atLeast(prices, index + 1).get(index));
+        WebElement price = atLeast(prices, index + 1).get(index);
+        if (isAndroid()) {
+            return textOf(price);
+        }
+        // on iOS the accessibility id is the name, so the price is read from value or label
+        String value = visible(price).getAttribute("value");
+        if (value != null && value.startsWith("$")) {
+            return value;
+        }
+        return visible(price).getAttribute("label");
     }
 
     public ProductPage openProduct(int index) {
