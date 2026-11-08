@@ -45,6 +45,12 @@ public final class CatalogPage extends BasePage {
         return textsOf(atLeast(names, 1));
     }
 
+    /** Raw iOS label of the price at index, which the app sets to "Product Price" (defect MDA-04). */
+    public String priceLabelOf(int index) {
+        WebElement price = atLeast(prices, index + 1).get(index);
+        return visible(price).getAttribute("label");
+    }
+
     public String priceOf(int index) {
         WebElement price = atLeast(prices, index + 1).get(index);
         if (isAndroid()) {

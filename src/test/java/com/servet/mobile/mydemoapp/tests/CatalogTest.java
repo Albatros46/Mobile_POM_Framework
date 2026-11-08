@@ -54,4 +54,20 @@ public class CatalogTest extends BaseMobileTest {
 
         assertThat(catalog.appLeftForeground(MyDemoApp.ANDROID_PACKAGE)).isTrue();
     }
+
+    /**
+     * KNOWN BUG MDA-04: on iOS, the catalog price element exposes only "Product Price" as its text, value,
+     * label and name, because the storyboard sets that accessibility label on the price label. The amount
+     * is therefore not available to VoiceOver or to automation.
+     * This test pins the current behaviour; it turns red when the app is fixed, and then it must change.
+     */
+    @Test(groups = "known-bug")
+    public void known_bug_mda_04_the_ios_catalog_price_is_not_exposed() {
+        if (Platform.current() == Platform.ANDROID) {
+            throw new SkipException("MDA-04 is an iOS defect");
+        }
+        CatalogPage catalog = new CatalogPage(driver());
+
+        assertThat(catalog.priceLabelOf(0)).isEqualTo("Product Price");
+    }
 }
