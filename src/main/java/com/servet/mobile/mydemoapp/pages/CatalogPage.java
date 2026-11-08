@@ -77,6 +77,7 @@ public final class CatalogPage extends BasePage {
 
     /** Taps the card at index without expecting a detail page, for taps that may not open one. */
     public void tapCard(int index) {
+        waitUntilShown();
         tap(atLeast(items, index + 1).get(index));
     }
 
@@ -88,6 +89,7 @@ public final class CatalogPage extends BasePage {
 
     /** Scrolls until the card with exactly this name is on screen and taps it, without waiting for a detail page. */
     public void tapCard(String name) {
+        waitUntilShown();
         // the name goes into a locator string, so quotes would break it
         if (name.contains("\"") || name.contains("'")) {
             throw new IllegalArgumentException("Product name must not contain quotes: " + name);
@@ -96,9 +98,9 @@ public final class CatalogPage extends BasePage {
             // tapping the title did not open the product, so the picture beside it is tapped
             String title = "new UiSelector().resourceId(\"" + AndroidIds.PREFIX + "titleTV\")"
                     + ".text(\"" + name + "\")";
-            driver.findElement(AppiumBy.androidUIAutomator(
+            visible(AppiumBy.androidUIAutomator(
                     "new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(" + title + ")"));
-            tap(driver.findElement(AppiumBy.androidUIAutomator(
+            tap(visible(AppiumBy.androidUIAutomator(
                     title + ".fromParent(new UiSelector().resourceId(\"" + AndroidIds.PREFIX + "productIV\"))")));
         } else {
             driver.executeScript("mobile: scroll",
