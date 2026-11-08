@@ -1,7 +1,6 @@
 package com.servet.mobile.mydemoapp.pages;
 
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.openqa.selenium.NoSuchElementException;
@@ -44,7 +43,7 @@ public final class ProductPage extends BasePage {
     private WebElement minusButton;
 
     @AndroidFindBy(id = AndroidIds.PREFIX + "cartBt")
-    @iOSXCUITFindBy(accessibility = "Add To Cart")
+    @iOSXCUITFindBy(accessibility = "AddToCart")
     private WebElement addToCartButton;
 
     @AndroidFindBy(id = AndroidIds.PREFIX + "cartIV")
@@ -63,7 +62,7 @@ public final class ProductPage extends BasePage {
     @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Catalog\")")
     private WebElement androidCatalogMenuItem;
 
-    private static final Pattern FIRST_INTEGER = Pattern.compile("\\d+");
+    private static final Pattern INTEGER = Pattern.compile("\\d+");
 
     public ProductPage(AppiumDriver driver) {
         super(driver);
@@ -146,27 +145,19 @@ public final class ProductPage extends BasePage {
             List<WebElement> badges = driver.findElements(AppiumBy.id(AndroidIds.PREFIX + "cartTV"));
             return badges.isEmpty() ? 0 : parseCount(badges.get(0).getText());
         }
-        List<WebElement> tabs = driver.findElements(AppiumBy.accessibilityId("Cart-tab-item"));
-        if (tabs.isEmpty()) {
-            return 0;
+        // the badge is a static text inside the cart tab; its name is the count
+        List<WebElement> badges = driver.findElements(AppiumBy.iOSClassChain(
+                "**/XCUIElementTypeButton[`name == \"Cart-tab-item\"`]/**/XCUIElementTypeStaticText"));
+        for (WebElement badge : badges) {
+            String name = badge.getAttribute("name");
+            if (name != null && INTEGER.matcher(name).matches()) {
+                return Integer.parseInt(name);
+            }
         }
-        // iOS reports the badge in value on some runs and only in label on others
-        String text = tabs.get(0).getAttribute("value");
-        if (text == null || text.isEmpty()) {
-            text = tabs.get(0).getAttribute("label");
-        }
-        return firstInteger(text);
+        return 0;
     }
 
     private static int parseCount(String text) {
         return text == null || text.isBlank() ? 0 : Integer.parseInt(text.trim());
-    }
-
-    private static int firstInteger(String text) {
-        if (text == null) {
-            return 0;
-        }
-        Matcher matcher = FIRST_INTEGER.matcher(text);
-        return matcher.find() ? Integer.parseInt(matcher.group()) : 0;
     }
 }
