@@ -64,6 +64,8 @@ public class DriverFactoryTest {
         assertThat(String.valueOf(caps.getCapability("appium:automationName"))).isEqualToIgnoringCase("XCUITest");
         assertThat(caps.getCapability("appium:deviceName")).isEqualTo("iPhone 16");
         assertThat(caps.getCapability("appium:platformVersion")).isEqualTo("18.2");
+        assertThat(((Number) caps.getCapability("appium:wdaStartupRetries")).intValue()).isEqualTo(2);
+        assertThat(((Number) caps.getCapability("appium:wdaStartupRetryInterval")).intValue()).isEqualTo(20_000);
     }
 
     @Test(groups = "unit")

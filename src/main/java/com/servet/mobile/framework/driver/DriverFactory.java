@@ -63,6 +63,9 @@ public final class DriverFactory {
                 .setDeviceName(settings.iosDevice())
                 .setNoReset(false)
                 .setWdaLaunchTimeout(Duration.ofMinutes(3))
+                // WebDriverAgent sometimes fails to start once; the driver retries it itself
+                .setWdaStartupRetries(2)
+                .setWdaStartupRetryInterval(Duration.ofSeconds(20))
                 .setNewCommandTimeout(NEW_COMMAND_TIMEOUT);
         if (!settings.iosVersion().isEmpty()) {
             options.setPlatformVersion(settings.iosVersion());
