@@ -32,7 +32,14 @@ public final class FailureEvidence implements ITestListener {
             Path folder = Files.createDirectories(
                     ROOT.resolve(Platform.current().name().toLowerCase(Locale.ROOT)));
             Files.write(folder.resolve(name + ".png"), driver.getScreenshotAs(OutputType.BYTES));
-            Files.writeString(folder.resolve(name + ".xml"), driver.getPageSource(), StandardCharsets.UTF_8);
+            String source = driver.getPageSource();
+            Files.writeString(folder.resolve(name + ".xml"), source, StandardCharsets.UTF_8);
+            // CI logs can be read without downloading the artifacts
+            if (Boolean.getBoolean("evidence.print")) {
+                System.out.println("===== PAGE SOURCE " + name + " BEGIN =====");
+                System.out.println(source);
+                System.out.println("===== PAGE SOURCE " + name + " END =====");
+            }
         } catch (IOException | RuntimeException e) {
             // evidence must never hide the test failure that is being reported
             Reporter.log("Could not save evidence for " + name + ": " + e.getMessage(), true);
