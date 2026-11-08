@@ -43,7 +43,7 @@ public class CatalogTest extends BaseMobileTest {
      * both at ProductCatalogFragment.java:156.
      * This test pins the current behaviour; it turns red when the app is fixed, and then it must change.
      */
-    @Test(dataProvider = "cardsOtherThanTheFirst")
+    @Test(dataProvider = "cardsOtherThanTheFirst", groups = "known-bug")
     public void known_bug_mda_03_a_card_other_than_the_first_crashes_the_app(String card) {
         if (Platform.current() == Platform.IOS) {
             throw new SkipException("MDA-03 is an Android defect");

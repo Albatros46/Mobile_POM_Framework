@@ -60,7 +60,10 @@ jobs:
           script: |
             nohup npx appium --port 4723 > appium-android.log 2>&1 &
             for i in $(seq 1 30); do curl -sf http://127.0.0.1:4723/status > /dev/null && break; sleep 2; done
-            mvn -B test -Dplatform=android -DexcludedGroups=unit
+            # known-bug runs last and on its own: MDA-03 crashes the app, and after a crash
+            # adb sometimes loses the emulator, which must not take the regular tests down
+            mvn -B test -Dplatform=android -DexcludedGroups=unit,known-bug
+            mvn -B test -Dplatform=android -Dgroups=known-bug
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -93,7 +96,7 @@ jobs:
       - run: |
           nohup npx appium --port 4723 > appium-ios.log 2>&1 &
           for i in $(seq 1 30); do curl -sf http://127.0.0.1:4723/status > /dev/null && break; sleep 2; done
-          mvn -B test -Dplatform=ios -Dios.device="iPhone 16" -Dwait.seconds=60 -Devidence.print=true -DexcludedGroups=unit
+          mvn -B test -Dplatform=ios -Dios.device="iPhone 16" -Dwait.seconds=60 -Devidence.print=true -DexcludedGroups=unit,known-bug
       - uses: actions/upload-artifact@v7
         if: always()
         with:
